@@ -6,7 +6,7 @@ public class BallControl : MonoBehaviour
     public float initialForceMagnitude = 25f;
     public float maxSpeed = 10f;
     public GameManager gameManager; // Referência para o GameManager
-    private AudioSource audioSource; // Adicione esta linha
+    private AudioSource audioSource;
 
     void GoBall()
     {
@@ -34,14 +34,14 @@ public class BallControl : MonoBehaviour
             return;
         }
 
-        // Encontrar o GameManager no início (IMPORTANTE)
-        gameManager = FindObjectOfType<GameManager>();
+        // Encontrar o GameManager no início (IMPORTANTE e CORRIGIDO)
+        gameManager = FindFirstObjectByType<GameManager>(); // Mudança aqui!
         if (gameManager == null)
         {
             Debug.LogError("GameManager não encontrado na cena!");
         }
 
-        audioSource = GetComponent<AudioSource>(); // Adicione esta linha
+        audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
             Debug.LogError("AudioSource não encontrado no objeto BallControl.");
@@ -70,7 +70,6 @@ public class BallControl : MonoBehaviour
         else if (collision.gameObject.name == "PontoAcima" || collision.gameObject.name == "PontoAbaixo")
         {
             Debug.Log("COLISÃO DETECTADA: " + collision.gameObject.name);
-            // Chama Score() através da referência, verificando se ela existe.
             if (gameManager != null)
             {
                 gameManager.Score(collision.gameObject.name);
@@ -83,19 +82,5 @@ public class BallControl : MonoBehaviour
         rb2d.linearVelocity = Vector2.zero;
         transform.position = new Vector2(x, y);
         Invoke("GoBall", 1); // Atraso antes de reiniciar
-    }
-
-    // (Opcional) Método para reset total do jogo
-    void RestartGame()
-    {
-        ResetBall(0, 0);
-        // Aqui, você *não* pode acessar diretamente PlayerScore1/2, porque
-        // RestartGame não é estático. Você precisaria da referência ao GameManager.
-        // Uma solução melhor seria ter um método ResetScores no GameManager.
-        if(gameManager != null)
-        {
-            GameManager.PlayerScore1 = 0;
-            GameManager.PlayerScore2 = 0;
-        }
     }
 }
