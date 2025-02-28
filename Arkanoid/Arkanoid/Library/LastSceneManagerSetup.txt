@@ -1,0 +1,5 @@
+sceneSetups:
+- path: Assets/2DBreakoutExampleProject/2DBreakout__Scenes/Menu.unity
+  isLoaded: 1
+  isActive: 1
+  isSubScene: 0
